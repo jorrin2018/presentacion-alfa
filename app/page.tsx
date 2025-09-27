@@ -15,6 +15,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PriceTable from "@/components/PriceTable";
 
+type Slide = {
+  title: string;
+  icon: React.ReactNode;
+  content: (string | React.ReactNode)[];
+  cta?: boolean;
+};
+
 // ======================================
 //  Marca ALFA
 // ======================================
@@ -44,7 +51,7 @@ function validateSlides(arr: Array<{ title: string; content: (string | React.Rea
 // ======================
 //  DATA: Diapositivas (solo íconos solicitados)
 // ======================
-const slides = [
+const slides: Slide[] = [
   {
     title: "1. Motivo de la Visita",
     icon: <Truck className="w-6 h-6 mr-2" style={{ color: brand.primary }} />,
@@ -149,7 +156,7 @@ const slides = [
     ],
     cta: true,
   },
-] as const;
+];
 
 // ======================
 //  COMPONENTE PRINCIPAL
