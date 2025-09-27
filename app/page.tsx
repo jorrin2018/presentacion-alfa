@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import PriceTable from "@/components/PriceTable";
 
 type Slide = {
   title: string;
@@ -100,11 +99,6 @@ const slides: Slide[] = [
       "Aranceles 2026 (50% productos chinos): fijar precios ahora o compra consolidada antes de fin de 2025.",
       "Impacto económico severo si no se atiende de inmediato.",
     ],
-  },
-  {
-    title: "Análisis Comparativo de Precios",
-    icon: <Table className="w-6 h-6 mr-2 text-blue-600" />,
-    content: [<PriceTable />],
   },
   {
     title: "5. Beneficios de la Alianza",
