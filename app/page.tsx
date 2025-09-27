@@ -211,7 +211,7 @@ export default function Home() {
   return (
     <div
       ref={containerRef}
-      className="relative p-4 sm:p-6 h-screen flex flex-col items-center justify-center"
+      className="relative p-4 sm:p-6 min-h-screen flex flex-col items-center justify-center"
       style={{ background: `linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #fff 100%)` }}
     >
       {/* Marca: barra superior */}
@@ -226,7 +226,7 @@ export default function Home() {
       </div>
 
       {/* Marca: watermark */}
-      <div className="pointer-events-none select-none opacity-5 absolute -right-6 -bottom-6">
+      <div className="pointer-events-none select-none opacity-0 sm:opacity-5 absolute -right-6 -bottom-6">
         <img src={LOGO_PATH} alt="ALFA Logo Watermark" className="w-[280px] sm:w-[360px] h-auto" />
       </div>
 
@@ -246,7 +246,7 @@ export default function Home() {
       )}
 
       {/* Contenedor del slide con animación */}
-      <div className="w-full max-w-2xl h-[64vh] flex items-center justify-center">
+      <div className="w-full max-w-2xl h-auto flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -254,7 +254,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -24, scale: 0.98 }}
             transition={{ duration: 0.45, ease: "easeOut" }}
-            className="w-full h-full"
+            className="w-full h-auto"
           >
             <Card
               className="w-full h-full flex flex-col justify-center rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.07)]"
@@ -294,22 +294,24 @@ export default function Home() {
       </div>
 
       {/* Controles */}
-      <div className="flex justify-between items-center w-full max-w-2xl mt-5">
+      <div className="flex flex-col sm:flex-row justify-between items-center w-full max-w-2xl mt-5 space-y-2 sm:space-y-0">
         <Button
           onClick={prevSlide}
           variant="outline"
-          className="border"
+          size="sm"
+          className="border w-full sm:w-auto"
           style={{ borderColor: brand.primary, color: brand.dark }}
         >
           Anterior
         </Button>
-        <span className="text-sm font-semibold" style={{ color: brand.mid }}>
+        <span className="text-sm font-semibold order-first sm:order-none" style={{ color: brand.mid }}>
           {current + 1} / {slides.length}
         </span>
         <Button
           onClick={nextSlide}
           variant="outline"
-          className="border"
+          size="sm"
+          className="border w-full sm:w-auto"
           style={{ borderColor: brand.primary, color: brand.dark }}
         >
           Siguiente
