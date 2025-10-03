@@ -259,6 +259,7 @@ export default function Home() {
   const slideContentRef = useRef<HTMLDivElement | null>(null);
   const [widthIndex, setWidthIndex] = useState<number>(3); // start near 1024px
   const [scale, setScale] = useState<number>(1);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   /**
    * nextSlide
@@ -315,6 +316,23 @@ export default function Home() {
       el.removeEventListener("touchend", onTouchEnd as any);
     };
   }, []);
+
+  // Fullscreen state tracking
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    const node = containerRef.current;
+    if (!node) return;
+    if (!document.fullscreenElement) {
+      if (node.requestFullscreen) node.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+    }
+  };
 
   /**
    * fitSlideToViewport
@@ -395,9 +413,22 @@ export default function Home() {
           {/* Use <img> for PNG served from /public */}
           <img src={LOGO_PATH} alt="ALFA Conectores y Habilitado" className="h-10 w-auto" />
         </div>
-        <a href="https://alfacyh.mx/" target="_blank" rel="noreferrer" className="text-sm font-semibold" style={{ color: brand.primary }}>
-          alfacyh.mx
-        </a>
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={toggleFullscreen}
+            variant="outline"
+            size="sm"
+            className="border"
+            style={{ borderColor: brand.primary, color: brand.dark }}
+            aria-pressed={isFullscreen}
+            title="Pantalla completa"
+          >
+            {isFullscreen ? "Salir" : "Pantalla completa"}
+          </Button>
+          <a href="https://alfacyh.mx/" target="_blank" rel="noreferrer" className="text-sm font-semibold" style={{ color: brand.primary }}>
+            alfacyh.mx
+          </a>
+        </div>
       </div>
 
       {/* Brand watermark */}
@@ -446,22 +477,30 @@ export default function Home() {
                   >
                     {slides[current].icon} {slides[current].title}
                   </h2>
-                  {slides[current].content.length > 0 && (
-                    <ul className="pl-6 text-left space-y-3">
-                      {slides[current].content.map((item, idx) => (
-                        typeof item === 'string' ? (
-                          <li key={idx} className="text-base sm:text-lg" style={{ color: brand.dark }}>
-                            <span
-                              className="mr-2 inline-block h-2 w-2 rounded-full"
-                              style={{ background: brand.primary }}
-                            ></span>
-                            {item}
-                          </li>
-                        ) : (
-                          <div key={idx}>{item}</div>
-                        )
-                      ))}
-                    </ul>
+                  {slides[current].title === "Atentamente" && slides[current].content.length > 0 ? (
+                    <div className="flex items-center justify-center py-6">
+                      <div className="text-2xl sm:text-4xl font-extrabold" style={{ color: brand.dark }}>
+                        {typeof slides[current].content[0] === 'string' ? slides[current].content[0] : slides[current].content[0]}
+                      </div>
+                    </div>
+                  ) : (
+                    slides[current].content.length > 0 && (
+                      <ul className="pl-6 text-left space-y-3">
+                        {slides[current].content.map((item, idx) => (
+                          typeof item === 'string' ? (
+                            <li key={idx} className="text-base sm:text-lg" style={{ color: brand.dark }}>
+                              <span
+                                className="mr-2 inline-block h-2 w-2 rounded-full"
+                                style={{ background: brand.primary }}
+                              ></span>
+                              {item}
+                            </li>
+                          ) : (
+                            <div key={idx}>{item}</div>
+                          )
+                        ))}
+                      </ul>
+                    )
                   )}
                 </CardContent>
               </Card>
