@@ -76,10 +76,35 @@ const WIDTH_STEPS_PX: number[] = [640, 768, 896, 1024, 1152, 1280, 1440, 1536, 1
  * Decorators for emphasizing bullet items with icons while keeping
  * the underlying literal text intact.
  */
+function highlightPhrase(text: string, phrase: string, className: string) {
+  const idx = text.indexOf(phrase);
+  if (idx === -1) return text;
+  const before = text.slice(0, idx);
+  const after = text.slice(idx + phrase.length);
+  return (
+    <>
+      {before}
+      <strong className={className}>{phrase}</strong>
+      {after}
+    </>
+  );
+}
+
+function decorateProblemText(text: string) {
+  let node: React.ReactNode = text;
+  node = highlightPhrase(String(node), "Descontento General", "font-semibold text-red-700");
+  node = highlightPhrase(String(node), "Suministros Inadecuados", "font-semibold text-red-700");
+  return node;
+}
+
+function decoratePreventiveText(text: string) {
+  return highlightPhrase(text, "Acción preventiva", "font-semibold");
+}
+
 const renderProblem = (text: string) => (
   <span className="inline-flex items-start">
     <AlertTriangle className="w-4 h-4 mt-1 mr-2 text-red-600" />
-    <span>{text}</span>
+    <span>{decorateProblemText(text)}</span>
   </span>
 );
 
@@ -93,7 +118,7 @@ const renderPositive = (text: string) => (
 const renderPreventive = (text: string) => (
   <span className="inline-flex items-start">
     <ShieldCheck className="w-4 h-4 mt-1 mr-2" style={{ color: brand.primary }} />
-    <span>{text}</span>
+    <span>{decoratePreventiveText(text)}</span>
   </span>
 );
 
