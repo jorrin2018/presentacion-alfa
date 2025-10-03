@@ -91,14 +91,29 @@ function highlightPhrase(text: string, phrase: string, className: string) {
 }
 
 function decorateProblemText(text: string) {
-  let node: React.ReactNode = text;
-  node = highlightPhrase(String(node), "Descontento General", "font-semibold text-red-700");
-  node = highlightPhrase(String(node), "Suministros Inadecuados", "font-semibold text-red-700");
-  return node;
+  if (text.startsWith("Descontento General")) {
+    return highlightPhrase(
+      text,
+      "Descontento General",
+      "font-extrabold text-red-800 bg-red-100 rounded px-1"
+    );
+  }
+  if (text.startsWith("Suministros Inadecuados")) {
+    return highlightPhrase(
+      text,
+      "Suministros Inadecuados",
+      "font-extrabold text-red-800 bg-red-100 rounded px-1"
+    );
+  }
+  return text;
 }
 
 function decoratePreventiveText(text: string) {
-  return highlightPhrase(text, "Acción preventiva", "font-semibold");
+  return highlightPhrase(
+    text,
+    "Acción preventiva",
+    "font-extrabold text-orange-700 bg-orange-100 rounded px-1"
+  );
 }
 
 const renderProblem = (text: string) => (
@@ -108,10 +123,38 @@ const renderProblem = (text: string) => (
   </span>
 );
 
+function decoratePositiveText(text: string) {
+  const phrases = [
+    "Capacidad de Respuesta Inmediata",
+    "Conectores",
+    "Maquinaria",
+    "Factor Logístico",
+    "Supervisión en la operación",
+    "Mantenimientos preventivos",
+    "Atención a emergencias",
+    "Revisiones periódicas de las máquinas",
+    "Personal técnico con vehículo asignado",
+    "Continuidad Operativa",
+    "Eficiencia de Costos",
+    "Calidad Garantizada",
+    "Simplicidad Logística",
+  ];
+  for (const phrase of phrases) {
+    if (text.startsWith(phrase)) {
+      return highlightPhrase(
+        text,
+        phrase,
+        "font-extrabold text-green-800 bg-green-100 rounded px-1"
+      );
+    }
+  }
+  return text;
+}
+
 const renderPositive = (text: string) => (
   <span className="inline-flex items-start">
     <CheckCircle className="w-4 h-4 mt-1 mr-2 text-green-600" />
-    <span>{text}</span>
+    <span>{decoratePositiveText(text)}</span>
   </span>
 );
 
@@ -487,17 +530,19 @@ export default function Home() {
                     slides[current].content.length > 0 && (
                       <ul className="pl-6 text-left space-y-3">
                         {slides[current].content.map((item, idx) => (
-                          typeof item === 'string' ? (
-                            <li key={idx} className="text-base sm:text-lg" style={{ color: brand.dark }}>
-                              <span
-                                className="mr-2 inline-block h-2 w-2 rounded-full"
-                                style={{ background: brand.primary }}
-                              ></span>
-                              {item}
-                            </li>
-                          ) : (
-                            <div key={idx}>{item}</div>
-                          )
+                          <li key={idx} className="text-base sm:text-lg flex items-start" style={{ color: brand.dark }}>
+                            {typeof item === 'string' ? (
+                              <>
+                                <span
+                                  className="mr-2 mt-2 inline-block h-2 w-2 rounded-full"
+                                  style={{ background: brand.primary }}
+                                ></span>
+                                <span>{item}</span>
+                              </>
+                            ) : (
+                              <>{item}</>
+                            )}
+                          </li>
                         ))}
                       </ul>
                     )
